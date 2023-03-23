@@ -1,0 +1,30 @@
+GAT layers 5 Cora
+
+(9.27, 70.4, 81.4, 39.6)
+
+
+GraphSAGE layers 5 Cora
+
+(7.5, 73.23, 85.0, 54.1)
+
+
+GIN layers 5 Cora
+
+(5.98, 33.56, 41.9, 20.3)
+
+
+GAT layers 5 Coauthor
+
+(9.83, 52.29, 70.34, 33.39)
+
+
+GraphSAGE layers 5 Coauthor
+
+(0.64, 91.32, 92.4, 89.65)
+
+
+GIN layers 5 Coauthor
+
+(6.64, 14.45, 29.71, 2.83)
+
+
