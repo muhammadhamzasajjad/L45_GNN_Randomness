@@ -66,7 +66,7 @@ def create_plot_sns(data, title, filename, x_val, hue_val, distance=False, jacca
     g.savefig("plots/"+filename+".pdf", bbox_inches="tight")
 
 
-directory = "./similarity_results"
+directory = "./similarity_results/"
 # Iterate over files in directory
 
 total_stats = {}
@@ -74,8 +74,13 @@ class_stats_cora = {}
 class_stats_coauthor = {}
 class_stats_arvix = {}
 
+cora_classes = [0,1,2,3,4,5,6]
+cora_classes_order = [6,1,5,0,2,4,3]
 coauthor_classes = [2,5,6,9,12,13,14]
+coauthor_classes_order = [9,6,12,14,2,5,13]
 arvix_classes = [12, 16, 20, 21, 24, 28, 35]
+arvix_classes_order = [12,35,21,20,28,24,16]
+class_graphs_labels = ["A", "B", "C", "D", "E", "F", "G"]
 arvix_metrics = ["aligned cosine", "unaligned cosine", "distance"]
 
 for filename in os.listdir(directory):
@@ -86,19 +91,22 @@ for filename in os.listdir(directory):
 
         if dataset == "Cora":
             NUM_CLASSES = 7
-            include_classes = [0,1,2,3,4,5,6]
+            include_classes = cora_classes
+            sorted_classes = cora_classes_order
         elif dataset == "Coauthor":
             NUM_CLASSES = 15
             include_classes = coauthor_classes
+            sorted_classes = coauthor_classes_order
         else:
             NUM_CLASSES = 40
             include_classes = arvix_classes
+            sorted_classes = arvix_classes_order
         # NUM_CLASSES = 7 if dataset == "Cora" else 15
         # coauthor_classes =  if dataset == "Coauthor" else [0,1,2,3,4,5,6]
 
         print("Reading plot data for", model, "with dataset", dataset)
 
-        with open(filename) as file:
+        with open(directory+filename) as file:
             while True:
 
                 # Get next line from file
@@ -128,15 +136,20 @@ for filename in os.listdir(directory):
                     if dataset == "Cora":
                         for i, class_result in zip(include_classes, class_results):
                             for result in class_result:
-                                class_stats_cora[key_val].append([result, model, "Class "+str(i)])
+                                label = class_graphs_labels[sorted_classes.index(i)]
+                                class_stats_cora[key_val].append([result, model, "Class "+str(label)])
                     elif dataset == "Coauthor":
                         for i, class_result in zip(include_classes, class_results):
                             for result in class_result:
-                                class_stats_coauthor[key_val].append([result, model, "Class "+str(i)])
+                                label = class_graphs_labels[sorted_classes.index(i)]
+                                print(i)
+                                print(label)
+                                class_stats_coauthor[key_val].append([result, model, "Class "+str(label)])
                     elif dataset == "Arvix" and key_val in arvix_metrics:
                         for i, class_result in zip(include_classes, class_results):
                             for result in class_result:
-                                class_stats_arvix[key_val].append([result, model, "Class "+str(i)])
+                                label = class_graphs_labels[sorted_classes.index(i)]
+                                class_stats_arvix[key_val].append([result, model, "Class "+str(label)])
 
                                 
 print("total", len(total_stats["aligned cosine"]))
